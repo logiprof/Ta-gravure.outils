@@ -1,0 +1,14 @@
+.tgpd-panel { padding: 0 12px 12px; }
+.tgpd-panel .description { margin: 8px 0 12px; display: block; }
+.tgpd-repeater { max-width: 640px; }
+.tgpd-tiers-table { margin-top: 4px; }
+.tgpd-tiers-table th { font-weight: 600; }
+.tgpd-tiers-table td, .tgpd-tiers-table th { vertical-align: middle; padding: 6px 8px; }
+.tgpd-tiers-table input[type="number"],
+.tgpd-tiers-table input[type="text"] { width: 100%; max-width: 120px; float: none !important; }
+.tgpd-tiers-table select { width: 100%; max-width: 220px; float: none !important; }
+.tgpd-col-actions { width: 32px; text-align: center; }
+.tgpd-remove { color: #b32d2e; font-size: 16px; text-decoration: none; cursor: pointer; }
+.tgpd-actions { margin: 8px 0 0 !important; padding: 0 !important; }
+.tgpd-inherited-list { margin: 0 0 8px 18px; list-style: disc; }
+.tgpd-term-field .tgpd-repeater { margin-bottom: 6px; }

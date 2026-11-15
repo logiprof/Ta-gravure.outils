@@ -1,0 +1,24 @@
+/* Ta-gravure outils – administration (couleurs de la charte : vert sapin, or, crème). */
+.tgo-wrap h1 .tgo-version { font-size: 13px; font-weight: 400; color: #8C5E22; margin-left: 8px; }
+.tgo-intro { font-size: 14px; max-width: 900px; }
+.tgo-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin: 20px 0; max-width: 1200px; }
+.tgo-carte { background: #fff; border: 1px solid #E3D6C1; border-left: 4px solid #E3D6C1; border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; }
+.tgo-carte p { margin: 8px 0; color: #33403B; }
+.tgo-carte.tgo-actif { border-left-color: #173A2E; }
+.tgo-carte.tgo-bloque { border-left-color: #B3261E; background: #fff8f7; }
+.tgo-carte.tgo-attente { border-left-color: #E2B36A; }
+.tgo-carte.tgo-inactif { opacity: .75; }
+.tgo-carte-tete { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.tgo-etat { font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 20px; background: #F6EFE3; color: #8C5E22; white-space: nowrap; }
+.tgo-actif .tgo-etat { background: #173A2E; color: #F6EFE3; }
+.tgo-bloque .tgo-etat { background: #B3261E; color: #fff; }
+.tgo-raison { color: #B3261E; font-weight: 600; }
+.tgo-pied { margin-top: auto !important; display: flex; justify-content: space-between; align-items: center; color: #777 !important; font-size: 12px; }
+.tgo-interrupteur { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; }
+.tgo-interrupteur input[type=checkbox] { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.tgo-curseur { position: relative; width: 40px; height: 22px; background: #c3c4c7; border-radius: 22px; transition: background .15s; flex: none; }
+.tgo-curseur::after { content: ""; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: left .15s; }
+.tgo-interrupteur input:checked + .tgo-curseur { background: #173A2E; }
+.tgo-interrupteur input:checked + .tgo-curseur::after { left: 21px; background: #E2B36A; }
+.tgo-interrupteur input:focus-visible + .tgo-curseur { outline: 2px solid #2271b1; outline-offset: 2px; }
+.tgo-image img { max-width: 220px; height: auto; border: 1px solid #E3D6C1; border-radius: 6px; display: block; margin-bottom: 6px; }

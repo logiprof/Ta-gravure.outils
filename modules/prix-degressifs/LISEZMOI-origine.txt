@@ -1,0 +1,44 @@
+=== TaGravure – Prix dégressifs ===
+Requires at least: 6.0
+Requires PHP: 7.4
+WC requires at least: 7.0
+Stable tag: 1.0.0
+License: GPLv2 or later
+
+Prix dégressifs selon la quantité pour WooCommerce.
+
+== Installation ==
+
+1. Extensions › Ajouter › Téléverser une extension › choisir tg-prix-degressifs.zip › Installer › Activer.
+2. Réglages : WooCommerce › Réglages › Produits › Prix dégressifs.
+
+== Utilisation ==
+
+Par produit :
+Produits › modifier un produit › onglet « Prix dégressifs » › « Paliers propres à ce produit ».
+Exemple : à partir de 6 → Remise en % → 10 ; à partir de 12 → Remise en % → 15.
+
+Par catégorie :
+Produits › Catégories › modifier une catégorie › section « Prix dégressifs ».
+Les paliers s'appliquent à tous les produits de la catégorie et de ses sous-catégories,
+sauf les produits réglés sur « Paliers propres » ou « Désactivés ».
+
+Types de palier :
+- Remise en % : le prix unitaire baisse du pourcentage indiqué.
+- Prix unitaire fixe : chaque pièce passe à ce prix. Les options payantes ajoutées par
+  d'autres extensions (texte gravé, etc.) restent facturées en plus.
+
+Code court : [prix_degressifs] (produit courant) ou [prix_degressifs id="123"].
+
+== Fonctionnement dans le panier ==
+
+- Le palier dépend de la quantité totale du produit dans le panier. Avec le cumul activé
+  (par défaut), 6 pièces avec 6 textes de gravure différents, ou plusieurs variantes du
+  même produit, comptent comme 6 pièces.
+- L'ancien prix est barré dans le panier et le palier appliqué est indiqué sur la commande.
+- Les prix HT/TTC suivent les réglages de taxes de la boutique.
+
+== Filtres pour développeurs ==
+
+tgpd_product_tiers( $tiers, $product ) : modifier les paliers d'un produit.
+tgpd_skip_cart_item( false, $cart_item, $key ) : ignorer une ligne du panier.

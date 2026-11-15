@@ -1,0 +1,10 @@
+.tgpd-table-wrap { margin: 0 0 1.2em; }
+.tgpd-title { font-weight: 600; margin: 0 0 .4em; }
+.tgpd-table { width: 100%; border-collapse: collapse; font-size: .95em; margin: 0; }
+.tgpd-table th,
+.tgpd-table td { padding: .45em .7em; border: 1px solid rgba(0, 0, 0, .1); text-align: left; }
+.tgpd-table thead th { background: rgba(0, 0, 0, .04); font-weight: 600; }
+.tgpd-table .tgpd-saving { white-space: nowrap; }
+.tgpd-table .tgpd-pick { opacity: .65; font-style: italic; }
+.tgpd-table tr.tgpd-active td { background: rgba(46, 160, 67, .12); font-weight: 600; }
+.tgpd-loop-hint { display: block; font-size: .85em; margin-top: .25em; opacity: .85; }

@@ -1,0 +1,79 @@
+# Publie automatiquement une nouvelle version de l'extension.
+#
+# Il suffit de changer « Version: » (et TGO_VERSION) dans ta-gravure-outils.php, d'ajouter
+# une section « ## X.Y.Z » dans CHANGELOG.md, puis de pousser sur main :
+# ce workflow vérifie le code, crée le zip, l'étiquette vX.Y.Z et la « release » GitHub.
+# Les sites qui ont l'extension l'installent ensuite automatiquement.
+name: Publier une version
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Lire la version
+        id: v
+        run: |
+          VERSION=$(grep -m1 -E '^\s*\*\s*Version:' ta-gravure-outils.php | sed -E 's/.*Version:\s*//' | tr -d '[:space:]')
+          CONST=$(grep -m1 "define( 'TGO_VERSION'" ta-gravure-outils.php | sed -E "s/.*'TGO_VERSION', '([^']+)'.*/\1/")
+          if [ "$VERSION" != "$CONST" ]; then
+            echo "::error::En-tête Version ($VERSION) et TGO_VERSION ($CONST) différents"; exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "existe=1" >> "$GITHUB_OUTPUT"
+            echo "La version v$VERSION est déjà publiée : rien à faire."
+          else
+            echo "existe=0" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Vérifier la syntaxe PHP
+        if: steps.v.outputs.existe == '0'
+        run: |
+          php -v
+          find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Construire le zip
+        if: steps.v.outputs.existe == '0'
+        run: |
+          VERSION=${{ steps.v.outputs.version }}
+          mkdir -p build/ta-gravure-outils
+          rsync -a ./ build/ta-gravure-outils/ \
+            --exclude '.git' --exclude '.github' --exclude 'build' \
+            --exclude '.gitignore' --exclude '.gitattributes' --exclude 'README.md'
+          (cd build && zip -rq ta-gravure-outils.zip ta-gravure-outils)
+          # Notes de version : section « ## VERSION » de CHANGELOG.md
+          awk -v v="$VERSION" '
+            $0 ~ "^## " { if (p) exit; if ($2 == v) { p = 1; next } }
+            p { print }
+          ' CHANGELOG.md > build/notes.md
+          [ -s build/notes.md ] || echo "Version $VERSION" > build/notes.md
+          REQ=$(grep -m1 -E '^\s*\*\s*Requires at least:' ta-gravure-outils.php | sed -E 's/.*:\s*//' | tr -d '[:space:]')
+          PHPV=$(grep -m1 -E '^\s*\*\s*Requires PHP:' ta-gravure-outils.php | sed -E 's/.*:\s*//' | tr -d '[:space:]')
+          TESTED=$(grep -m1 -E '^Tested up to:' readme.txt | sed -E 's/.*:\s*//' | tr -d '[:space:]')
+          jq -n --arg version "$VERSION" --rawfile notes build/notes.md \
+                --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg requires "$REQ" \
+                --arg requires_php "$PHPV" --arg tested "$TESTED" \
+                --arg package "https://github.com/${{ github.repository }}/releases/download/v$VERSION/ta-gravure-outils.zip" \
+                '{version:$version, date:$date, requires:$requires, requires_php:$requires_php, tested:$tested, package:$package, notes:$notes}' > build/info.json
+          cat build/info.json
+
+      - name: Publier la version
+        if: steps.v.outputs.existe == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=${{ steps.v.outputs.version }}
+          gh release create "v$VERSION" build/ta-gravure-outils.zip build/info.json \
+            --target "${{ github.sha }}" --title "Ta-gravure outils $VERSION" --notes-file build/notes.md --latest
