@@ -3,7 +3,7 @@
  * Plugin Name:       Ta-gravure outils
  * Plugin URI:        https://github.com/logiprof/Ta-gravure.outils
  * Description:       Tous les outils de ta-gravure.art réunis en une seule extension modulaire : charte graphique, formulaire de contact, e-mails et factures, personnalisation à graver, prix dégressifs, partage social & SEO. Chaque module s'active séparément et a ses propres réglages (menu « Ta-gravure »). Mises à jour automatiques depuis GitHub.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            ta-gravure.art
  * Author URI:        https://ta-gravure.art
  * Requires at least: 6.0
@@ -19,12 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TGO_VERSION', '1.0.0' );
+define( 'TGO_VERSION', '1.0.1' );
 define( 'TGO_FILE', __FILE__ );
 define( 'TGO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TGO_URL', plugin_dir_url( __FILE__ ) );
 define( 'TGO_BASENAME', plugin_basename( __FILE__ ) );
 define( 'TGO_GITHUB_REPO', 'logiprof/Ta-gravure.outils' );
+define( 'TGO_UPDATE_URI', 'https://github.com/logiprof/Ta-gravure.outils' ); // identique à l'en-tête « Update URI »
 
 require_once TGO_DIR . 'includes/modules.php';
 require_once TGO_DIR . 'includes/class-tgo-core.php';

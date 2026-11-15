@@ -3,7 +3,7 @@ Contributors: ta-gravure
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 
 Tous les outils de ta-gravure.art réunis en une seule extension modulaire, avec mises à jour automatiques depuis GitHub.
@@ -31,6 +31,9 @@ L'extension vérifie GitHub toutes les 6 heures et installe seule chaque nouvell
 (réglage : Ta-gravure › Mises à jour).
 
 == Changelog ==
+
+= 1.0.1 =
+* Mises à jour détectées même quand wordpress.org ne répond pas.
 
 = 1.0.0 =
 * Première version modulaire (voir CHANGELOG.md).

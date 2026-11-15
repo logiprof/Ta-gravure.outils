@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.0.1
+
+- Les mises à jour depuis GitHub sont détectées même quand wordpress.org ne répond pas (secours sur la liste des mises à jour de WordPress).
+
 ## 1.0.0
 
 Première version de **Ta-gravure outils** : les six extensions séparées réunies en une seule extension modulaire.

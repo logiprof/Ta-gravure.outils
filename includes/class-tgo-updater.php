@@ -26,6 +26,8 @@ class TGO_Updater {
 
 	public static function init() {
 		add_filter( 'update_plugins_github.com', array( __CLASS__, 'verifier' ), 10, 4 );
+		// Secours : WordPress n'appelle le filtre ci-dessus que si wordpress.org a répondu.
+		add_filter( 'site_transient_update_plugins', array( __CLASS__, 'injecter' ) );
 		add_filter( 'plugins_api', array( __CLASS__, 'details' ), 20, 3 );
 		add_filter( 'upgrader_source_selection', array( __CLASS__, 'renommer_dossier' ), 10, 4 );
 		add_filter( 'auto_update_plugin', array( __CLASS__, 'maj_auto' ), 20, 2 );
@@ -160,7 +162,7 @@ class TGO_Updater {
 			return $update;
 		}
 		return array(
-			'id'           => 'github.com/' . TGO_GITHUB_REPO,
+			'id'           => TGO_UPDATE_URI,
 			'slug'         => self::SLUG,
 			'plugin'       => TGO_BASENAME,
 			'version'      => $info['version'],
@@ -172,6 +174,30 @@ class TGO_Updater {
 			'icons'        => array(),
 			'autoupdate'   => self::auto_active(),
 		);
+	}
+
+	/** Ajoute notre extension à la liste des mises à jour si WordPress ne l'a pas fait (wordpress.org injoignable…). */
+	public static function injecter( $transient ) {
+		if ( ! is_object( $transient ) || ! isset( $transient->last_checked ) ) {
+			return $transient;
+		}
+		if ( isset( $transient->response[ TGO_BASENAME ] ) || isset( $transient->no_update[ TGO_BASENAME ] ) ) {
+			return $transient;
+		}
+		$maj = self::verifier( false, array(), TGO_BASENAME );
+		if ( ! $maj ) {
+			return $transient;
+		}
+		$maj                = (object) $maj;
+		$maj->new_version   = $maj->version;
+		if ( version_compare( $maj->version, TGO_VERSION, '>' ) ) {
+			$transient->response   = isset( $transient->response ) && is_array( $transient->response ) ? $transient->response : array();
+			$transient->response[ TGO_BASENAME ] = $maj;
+		} else {
+			$transient->no_update  = isset( $transient->no_update ) && is_array( $transient->no_update ) ? $transient->no_update : array();
+			$transient->no_update[ TGO_BASENAME ] = $maj;
+		}
+		return $transient;
 	}
 
 	/** Fenêtre « Voir les détails » de la mise à jour. */
